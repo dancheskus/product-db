@@ -1,25 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { v4 as uuidv4 } from 'uuid'
 
-interface IProduct {
-  id: string | number
-  name: string
-}
-
-interface IBrand {
-  id: string | number
-  name: string
-  products: IProduct[]
-}
-
-interface ICategory {
-  name: string
-  brands: IBrand[]
-}
-
-export interface IProductState {
-  [key: string]: ICategory
-}
+import { IProductState } from './types'
 
 const initialState: IProductState = {
   '57b42bfe31b6f0132cb96836': {
@@ -101,7 +83,9 @@ export const productsSlice = createSlice({
       const newCategoryId = uuidv4()
       state[newCategoryId] = { name: payload, brands: [] }
     },
-    removeCategory: () => {},
+    removeCategory: (state, { payload }: PayloadAction<string>) => {
+      delete state[payload]
+    },
     addBrand: (
       state,
       { payload: { categoryId, brandName } }: PayloadAction<{ categoryId: string; brandName: string }>,
@@ -109,7 +93,14 @@ export const productsSlice = createSlice({
       const newBrandId = uuidv4()
       state[categoryId].brands.push({ id: newBrandId, name: brandName, products: [] })
     },
-    removeBrand: () => {},
+    removeBrand: (
+      state,
+      { payload: { categoryId, brandId } }: PayloadAction<{ categoryId: string; brandId: string | number }>,
+    ) => {
+      const brands = state[categoryId].brands
+      const index = brands.findIndex(({ id }) => id === brandId)
+      brands.splice(index, 1)
+    },
     addProduct: (
       state,
       {
@@ -121,7 +112,17 @@ export const productsSlice = createSlice({
       const index = brands.findIndex(({ id }) => id === brandId)
       brands[index].products.push({ id: newProductId, name: productName })
     },
-    removeProduct: () => {},
+    removeProduct: (
+      state,
+      {
+        payload: { categoryId, brandId, productId },
+      }: PayloadAction<{ categoryId: string; brandId: string | number; productId: string | number }>,
+    ) => {
+      const brands = state[categoryId].brands
+      const brandIndex = brands.findIndex(({ id }) => id === brandId)
+      const productIndex = brands[brandIndex].products.findIndex(({ id }) => id === productId)
+      brands[brandIndex].products.splice(productIndex, 1)
+    },
   },
 })
 

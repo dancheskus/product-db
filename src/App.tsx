@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 
-import { addBrand, addCategory, addProduct } from 'redux/products'
+import { addBrand, addCategory, addProduct, removeBrand, removeCategory, removeProduct } from 'redux/products'
 import { RootState } from 'redux/store'
 import GlobalStyle from 'style/GlobalStyle'
 
@@ -23,11 +23,11 @@ function Test() {
     <div>
       {keys.map(categoryId => (
         <div key={categoryId}>
-          <h1>{products[categoryId].name}</h1>
+          <h1 onClick={() => dispatch(removeCategory(categoryId))}>{products[categoryId].name}</h1>
 
           <button
             type='button'
-            style={{ background: 'orangered', color: 'white' }}
+            style={{ background: 'lightgray' }}
             onClick={() => {
               const newBrandName = prompt('Input brand name')
               if (!newBrandName) return
@@ -37,9 +37,9 @@ function Test() {
             Add brand
           </button>
 
-          {products[categoryId].brands.map(({ name, products, id }) => (
-            <div key={id}>
-              <h3>{name}</h3>
+          {products[categoryId].brands.map(({ name, products, id: brandId }) => (
+            <div key={brandId}>
+              <h3 onClick={() => dispatch(removeBrand({ brandId, categoryId }))}>{name}</h3>
 
               <button
                 type='button'
@@ -47,14 +47,16 @@ function Test() {
                 onClick={() => {
                   const newProductName = prompt('Input product name')
                   if (!newProductName) return
-                  dispatch(addProduct({ categoryId, brandId: id, productName: newProductName }))
+                  dispatch(addProduct({ categoryId, brandId, productName: newProductName }))
                 }}
               >
                 Add product
               </button>
 
-              {products.map(({ name, id }) => (
-                <h5 key={id}>{name}</h5>
+              {products.map(({ name, id: productId }) => (
+                <h5 key={productId} onClick={() => dispatch(removeProduct({ brandId, categoryId, productId }))}>
+                  {name}
+                </h5>
               ))}
             </div>
           ))}
