@@ -16,52 +16,63 @@ export default function App() {
 
 function Test() {
   const dispatch = useDispatch()
-  const products = useSelector((state: RootState) => state.products)
-  const keys = Object.keys(products)
+  const { brands, categories, products } = useSelector((state: RootState) => state.appData)
 
   return (
     <div>
-      {keys.map(categoryId => (
-        <div key={categoryId}>
-          <h1 onClick={() => dispatch(removeCategory(categoryId))}>{products[categoryId].name}</h1>
+      {Object.keys(categories).map(categoryId => {
+        const { name: categoryName, brandIds } = categories[categoryId]
 
-          <button
-            type='button'
-            style={{ background: 'lightgray' }}
-            onClick={() => {
-              const newBrandName = prompt('Input brand name')
-              if (!newBrandName) return
-              dispatch(addBrand({ categoryId, brandName: newBrandName }))
-            }}
-          >
-            Add brand
-          </button>
+        return (
+          <div key={categoryId}>
+            <h1 onClick={() => dispatch(removeCategory(categoryId))}>{categoryName}</h1>
 
-          {products[categoryId].brands.map(({ name, products, id: brandId }) => (
-            <div key={brandId}>
-              <h3 onClick={() => dispatch(removeBrand({ brandId, categoryId }))}>{name}</h3>
+            <button
+              type='button'
+              style={{ background: 'lightgray' }}
+              onClick={() => {
+                const newBrandName = prompt('Input brand name')
+                if (!newBrandName) return
+                dispatch(addBrand({ categoryId, brandName: newBrandName }))
+              }}
+            >
+              Add brand
+            </button>
 
-              <button
-                type='button'
-                style={{ background: 'orangered', color: 'white' }}
-                onClick={() => {
-                  const newProductName = prompt('Input product name')
-                  if (!newProductName) return
-                  dispatch(addProduct({ categoryId, brandId, productName: newProductName }))
-                }}
-              >
-                Add product
-              </button>
+            {brandIds.map(brandId => {
+              const { name: brandName, productIds } = brands[brandId]
 
-              {products.map(({ name, id: productId }) => (
-                <h5 key={productId} onClick={() => dispatch(removeProduct({ brandId, categoryId, productId }))}>
-                  {name}
-                </h5>
-              ))}
-            </div>
-          ))}
-        </div>
-      ))}
+              return (
+                <div key={brandId}>
+                  <h3 onClick={() => dispatch(removeBrand(brandId))}>{brandName}</h3>
+
+                  <button
+                    type='button'
+                    style={{ background: 'orangered', color: 'white' }}
+                    onClick={() => {
+                      const newProductName = prompt('Input product name')
+                      if (!newProductName) return
+                      dispatch(addProduct({ brandId, productName: newProductName }))
+                    }}
+                  >
+                    Add product
+                  </button>
+
+                  {productIds.map(productId => {
+                    const { name: productName } = products[productId]
+
+                    return (
+                      <h5 key={productId} onClick={() => dispatch(removeProduct(productId))}>
+                        {productName}
+                      </h5>
+                    )
+                  })}
+                </div>
+              )
+            })}
+          </div>
+        )
+      })}
 
       <div style={{ marginTop: '4rem' }} />
 
