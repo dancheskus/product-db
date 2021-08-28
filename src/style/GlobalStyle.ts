@@ -24,6 +24,8 @@ export default createGlobalStyle`
     border: none;
     outline: none;
     cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
   }
 
   input {

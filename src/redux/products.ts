@@ -111,7 +111,7 @@ const responseData: IResponseData = {
           name: 'Sony',
           products: [
             {
-              id: '7564534',
+              id: 'f6405649-325e-7564534',
               name: 'Sony Vaio',
             },
           ],
