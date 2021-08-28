@@ -1,26 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { v4 as uuidv4 } from 'uuid'
 
-import { IProductState } from './types'
-
-interface IProduct {
-  id: string
-  name: string
-}
-interface IBrand {
-  id: string
-  name: string
-  products: IProduct[]
-}
-
-interface ICategory {
-  id: string
-  name: string
-  brands: IBrand[]
-}
-interface IResponseData {
-  categories: ICategory[]
-}
+import { INewBrand, INewCategory, INewProduct, IResponseData } from './types'
 
 const responseData: IResponseData = {
   categories: [
@@ -175,25 +156,6 @@ const responseData: IResponseData = {
   ],
 }
 
-interface INewCategory {
-  [key: string]: {
-    name: string
-    brandIds: string[]
-  }
-}
-interface INewBrand {
-  [key: string]: {
-    name: string
-    productIds: string[]
-    categoryId: string
-  }
-}
-interface INewProduct {
-  [key: string]: {
-    name: string
-    brandId: string
-  }
-}
 const normalizeData = (data: IResponseData) => {
   const newCategories: INewCategory = {}
   const newBrands: INewBrand = {}
@@ -220,8 +182,6 @@ const normalizeData = (data: IResponseData) => {
 
   return { categories: newCategories, brands: newBrands, products: newProducts }
 }
-
-console.log(normalizeData(responseData))
 
 const initialState: ReturnType<typeof normalizeData> = normalizeData(responseData)
 
