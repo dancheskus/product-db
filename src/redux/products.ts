@@ -5,12 +5,25 @@ import responseData from 'responseData.json'
 
 import normalizeData from './normalizeData'
 
-const initialState: ReturnType<typeof normalizeData> = normalizeData(responseData)
+const savedData = localStorage.getItem('savedData')
+
+type TInitialState = ReturnType<typeof normalizeData>
+
+let initialState: TInitialState
+
+if (savedData) {
+  initialState = JSON.parse(savedData)
+} else {
+  const data = normalizeData(responseData)
+  initialState = data
+  localStorage.setItem('savedData', JSON.stringify(data))
+}
 
 export const appDataSlice = createSlice({
   name: 'appData',
   initialState,
   reducers: {
+    setNewState: (_, { payload }: PayloadAction<TInitialState>) => payload,
     addCategory: (state, { payload: categoryName }: PayloadAction<string>) => {
       const newCategoryId = uuidv4()
       state.categories[newCategoryId] = { name: categoryName, brandIds: [] }
@@ -68,6 +81,7 @@ export const appDataSlice = createSlice({
   },
 })
 
-export const { addCategory, removeCategory, addBrand, removeBrand, addProduct, removeProduct } = appDataSlice.actions
+export const { addCategory, removeCategory, addBrand, removeBrand, addProduct, removeProduct, setNewState } =
+  appDataSlice.actions
 
 export default appDataSlice.reducer

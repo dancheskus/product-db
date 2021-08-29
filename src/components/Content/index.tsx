@@ -2,8 +2,10 @@ import ReactJson from 'react-json-view'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 
-import { addBrand, addProduct, removeBrand, removeProduct } from 'redux/products'
+import responseData from 'responseData.json'
+import { addBrand, addProduct, removeBrand, removeProduct, setNewState } from 'redux/products'
 import { RootState } from 'redux/store'
+import normalizeData from 'redux/normalizeData'
 
 import {
   ContentWrapper,
@@ -88,10 +90,21 @@ export default function Content({ currentCategoryId }: IProps) {
           Add Product
         </FooterButton>
 
-        <FooterButton>Load Original State</FooterButton>
+        <FooterButton onClick={() => dispatch(setNewState(normalizeData(responseData)))}>
+          Load Original State
+        </FooterButton>
       </ContentFooter>
     </ContentWrapper>
   ) : (
-    <div style={{ padding: '1rem' }}>Add first category</div>
+    <div style={{ padding: '1rem', display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
+      <div>Add first category</div>
+      <div style={{ padding: '2rem 0' }}>OR</div>
+      <div
+        style={{ border: '1px solid', borderRadius: '5px', padding: '1rem 1.5rem', cursor: 'pointer' }}
+        onClick={() => dispatch(setNewState(normalizeData(responseData)))}
+      >
+        Load Original State
+      </div>
+    </div>
   )
 }
