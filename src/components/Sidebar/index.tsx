@@ -36,7 +36,7 @@ export default function Sidebar({ currentCategoryId, setCurrentCategoryId }: IPr
 
       <SidebarCategoryButtonWrapper>
         <SidebarCategoryButton
-          color='green'
+          color='#3b3e45'
           onClick={() => {
             const newCategoryName = prompt('Input category name')
             if (!newCategoryName) return
@@ -46,7 +46,7 @@ export default function Sidebar({ currentCategoryId, setCurrentCategoryId }: IPr
           Add category
         </SidebarCategoryButton>
 
-        <SidebarCategoryButton color='red' onClick={() => dispatch(removeCategory(currentCategoryId))}>
+        <SidebarCategoryButton color='#505359' onClick={() => dispatch(removeCategory(currentCategoryId))}>
           Remove category
         </SidebarCategoryButton>
       </SidebarCategoryButtonWrapper>

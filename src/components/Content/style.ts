@@ -23,10 +23,11 @@ export const BrandSelector = styled.div`
 
 export const BrandTab = styled.div<{ isActive?: boolean }>`
   ${({ isActive }) => css`
-    padding: 0.5rem 1rem;
+    padding: 1rem 1.5rem;
     border: 1px solid;
     border-radius: 5px;
-    background: ${isActive ? 'lightgray' : 'none'};
+    background: ${isActive ? '#636a79' : 'none'};
+    color: ${isActive ? 'white' : 'black'};
     transition: 0.2s;
     cursor: pointer;
 
@@ -44,7 +45,7 @@ export const ProductList = styled.div`
   display: grid;
   gap: 1rem;
   align-content: start;
-  padding: 0 1rem 1rem 1rem;
+  padding: 1rem;
 `
 export const ProductItem = styled.div`
   height: 5rem;
@@ -60,8 +61,9 @@ export const ProductItem = styled.div`
     align-items: center;
   }
 `
+
 export const ProductItemButton = styled.button`
-  background: red;
+  background: #636a79;
   color: white;
   transition: 0.2s;
 
@@ -72,7 +74,7 @@ export const ProductItemButton = styled.button`
 
 export const ContentFooter = styled.div`
   grid-area: footer;
-  background: gray;
+  background: #434851;
   padding: 1.5rem 1rem;
 `
 
@@ -80,6 +82,8 @@ export const AddProduct = styled.button`
   padding: 0.5rem 1rem;
   border-radius: 5px;
   transition: 0.2s;
+  background: #636a79;
+  color: white;
 
   :hover {
     filter: brightness(0.9);

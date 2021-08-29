@@ -5,6 +5,7 @@ export const SidebarWrapper = styled.div`
   border-right: 1px solid;
   display: grid;
   grid-template-rows: 1fr min-content;
+  background: #a9afbc;
 `
 
 export const SidebarCategoryButtonWrapper = styled.div`
@@ -18,6 +19,7 @@ export const SidebarCategoryButton = styled.button<{ color: string }>`
     display: grid;
     place-items: center;
     transition: 0.2s;
+    color: white;
 
     :hover {
       filter: brightness(0.9);
@@ -27,21 +29,22 @@ export const SidebarCategoryButton = styled.button<{ color: string }>`
 
 export const CategoryButton = styled.button<{ isActive: boolean }>`
   ${({ isActive }) => css`
-    background: ${isActive ? 'green' : 'orangered'};
+    background: ${isActive ? '#636a79' : '#505359'};
     padding: 2rem;
     transition: 0.2s;
     width: 100%;
     text-align: left;
     word-break: break-word;
+    color: white;
 
     :not(:last-child) {
-      border-bottom: 1px solid;
+      border-bottom: 1px solid #5f646d;
     }
 
     ${!isActive &&
     css`
       :hover {
-        background: red;
+        background: #595f6e;
       }
     `}
   `}

@@ -18,6 +18,7 @@ export default createGlobalStyle`
     font-size: 1.6rem;
     line-height: 1;
     box-sizing: border-box;
+    background: #f1eff3;
   }
 
   button {
