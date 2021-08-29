@@ -1,0 +1,19 @@
+services:
+  product-db:
+    container_name:  ${PROJ_NAME}
+    build: .
+    restart: always
+    environment:
+      NODE_ENV: production
+    ports: [5000]
+    labels:
+      - "traefik.http.routers.${PROJ_NAME}.rule=Host(`${DOMAIN}`)"
+      - "traefik.http.routers.${PROJ_NAME}.entrypoints=websecure"
+      - "traefik.http.routers.${PROJ_NAME}.tls.certresolver=myresolver"
+      - "traefik.http.routers.${PROJ_NAME}.tls.domains[0].main=${DOMAIN}"
+      - "traefik.http.routers.${PROJ_NAME}.tls.domains[0].sans=www.${DOMAIN}"
+
+networks:
+  default:
+    external:
+      name: traefik
