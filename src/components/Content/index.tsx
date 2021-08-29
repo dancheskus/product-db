@@ -72,13 +72,13 @@ export default function Content({ currentCategoryId }: IProps) {
         displayObjectSize={false}
         displayDataTypes={false}
         style={{ fontSize: '1.4rem', gridArea: 'json', overflow: 'auto' }}
-        name={false}
+        name='Current Redux State'
         src={appData}
       />
 
       <ContentFooter>
         <FooterButton
-          disabled={!currentBrandIds.length}
+          disabled={!currentBrandIds?.length}
           onClick={() => {
             const newProductName = prompt('Input product name')
             if (!newProductName) return
