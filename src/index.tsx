@@ -4,8 +4,7 @@ import { Provider } from 'react-redux'
 
 import { store } from 'redux/store'
 import GlobalStyle from 'style/GlobalStyle'
-
-import App from './App'
+import App from 'components/App'
 
 ReactDOM.render(
   <StrictMode>
