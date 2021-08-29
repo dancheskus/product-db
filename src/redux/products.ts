@@ -3,34 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import responseData from 'responseData.json'
 
-import { INewBrand, INewCategory, INewProduct, IResponseData } from './types'
-
-const normalizeData = (data: IResponseData) => {
-  const newCategories: INewCategory = {}
-  const newBrands: INewBrand = {}
-  const newProducts: INewProduct = {}
-
-  data.categories.forEach(({ id: categoryId, name, brands }) => {
-    newCategories[categoryId] = {
-      name,
-      brandIds: brands.map(({ id: brandId, name, products }) => {
-        newBrands[brandId] = {
-          name,
-          productIds: products.map(({ id: productId, name }) => {
-            newProducts[productId] = { name, brandId }
-
-            return productId
-          }),
-          categoryId,
-        }
-
-        return brandId
-      }),
-    }
-  })
-
-  return { categories: newCategories, brands: newBrands, products: newProducts }
-}
+import normalizeData from './normalizeData'
 
 const initialState: ReturnType<typeof normalizeData> = normalizeData(responseData)
 
