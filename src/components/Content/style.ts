@@ -75,17 +75,26 @@ export const ProductItemButton = styled.button`
 export const ContentFooter = styled.div`
   grid-area: footer;
   background: #434851;
-  padding: 1.5rem 1rem;
+  padding: 1.5rem 2rem;
 `
 
-export const AddProduct = styled.button`
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  transition: 0.2s;
-  background: #636a79;
-  color: white;
+export const FooterButton = styled.button`
+  ${({ disabled }) => css`
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    transition: 0.2s;
+    background: ${disabled ? '#778092' : '#636a79'};
+    color: ${disabled ? '#969696' : 'white'};
 
-  :hover {
-    filter: brightness(0.9);
-  }
+    :not(:last-child) {
+      margin-right: 2rem;
+    }
+
+    ${!disabled &&
+    css`
+      :hover {
+        filter: brightness(0.9);
+      }
+    `}
+  `}
 `

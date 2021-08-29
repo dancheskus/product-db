@@ -13,7 +13,7 @@ import {
   ProductItem,
   ProductItemButton,
   ContentFooter,
-  AddProduct,
+  FooterButton,
 } from './style'
 
 interface IProps {
@@ -33,7 +33,7 @@ export default function Content({ currentCategoryId }: IProps) {
     currentBrandIds && setCurrentBrandId(currentBrandIds[0])
   }, [currentBrandIds])
 
-  return (
+  return Object.keys(categories).length ? (
     <ContentWrapper>
       <BrandSelector>
         {currentBrandIds &&
@@ -77,7 +77,8 @@ export default function Content({ currentCategoryId }: IProps) {
       />
 
       <ContentFooter>
-        <AddProduct
+        <FooterButton
+          disabled={!currentBrandIds.length}
           onClick={() => {
             const newProductName = prompt('Input product name')
             if (!newProductName) return
@@ -85,8 +86,12 @@ export default function Content({ currentCategoryId }: IProps) {
           }}
         >
           Add Product
-        </AddProduct>
+        </FooterButton>
+
+        <FooterButton>Load Original State</FooterButton>
       </ContentFooter>
     </ContentWrapper>
+  ) : (
+    <div style={{ padding: '1rem' }}>Add first category</div>
   )
 }
