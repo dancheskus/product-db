@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import styled, { css } from 'styled-components'
 import { useState } from 'react'
 import { useEffect } from 'react'
+import ReactJson from 'react-json-view'
 
 import { addBrand, addCategory, addProduct, removeBrand, removeCategory, removeProduct } from 'redux/products'
 import { RootState } from 'redux/store'
@@ -10,7 +11,7 @@ const AppWrapper = styled.div`
   height: 100vh;
   display: grid;
   grid-template-rows: 8rem 1fr;
-  grid-template-columns: 20rem 1fr;
+  grid-template-columns: min-content 1fr;
   grid-template-areas:
     'header header'
     'side content';
@@ -34,7 +35,13 @@ const Sidebar = styled.div`
 const Content = styled.div`
   grid-area: content;
   display: grid;
+  grid-template-areas:
+    'brand json'
+    'products json'
+    'footer footer';
   grid-template-rows: min-content 1fr min-content;
+  grid-template-columns: 1.5fr 1fr;
+  overflow: auto;
 `
 
 const CategoryButton = styled.button<{ isActive: boolean }>`
@@ -44,6 +51,11 @@ const CategoryButton = styled.button<{ isActive: boolean }>`
     transition: 0.2s;
     width: 100%;
     text-align: left;
+    word-break: break-word;
+
+    :not(:last-child) {
+      border-bottom: 1px solid;
+    }
 
     ${!isActive &&
     css`
@@ -55,6 +67,7 @@ const CategoryButton = styled.button<{ isActive: boolean }>`
 `
 
 const BrandSelector = styled.div`
+  grid-area: brand;
   display: grid;
   grid-auto-flow: column;
   justify-content: start;
@@ -81,6 +94,7 @@ const BrandTab = styled.div<{ isActive?: boolean }>`
 `
 
 const ProductList = styled.div`
+  grid-area: products;
   display: grid;
   gap: 1rem;
   align-content: start;
@@ -112,6 +126,7 @@ const ProductItemButton = styled.button`
 `
 
 const ContentFooter = styled.div`
+  grid-area: footer;
   background: gray;
   padding: 1.5rem 1rem;
 `
@@ -133,8 +148,7 @@ const SidebarCategoryButtonWrapper = styled.div`
 const SidebarCategoryButton = styled.button<{ color: string }>`
   ${({ color }) => css`
     background: ${color};
-    padding: 2rem 0;
-    font-size: 5rem;
+    padding: 2rem;
     display: grid;
     place-items: center;
     transition: 0.2s;
@@ -147,7 +161,8 @@ const SidebarCategoryButton = styled.button<{ color: string }>`
 
 export default function App() {
   const dispatch = useDispatch()
-  const { brands, categories, products } = useSelector((state: RootState) => state.appData)
+  const appData = useSelector((state: RootState) => state.appData)
+  const { brands, categories, products } = appData
   const categoryIds = Object.keys(categories)
   const [currentCategoryId, setCurrentCategoryId] = useState<string>(categoryIds[0])
   const currentCategory = categories[currentCategoryId]
@@ -195,11 +210,11 @@ export default function App() {
               dispatch(addCategory(newCategoryName))
             }}
           >
-            +
+            Add category
           </SidebarCategoryButton>
 
           <SidebarCategoryButton color='red' onClick={() => dispatch(removeCategory(currentCategoryId))}>
-            -
+            Remove category
           </SidebarCategoryButton>
         </SidebarCategoryButtonWrapper>
       </Sidebar>
@@ -236,6 +251,16 @@ export default function App() {
             ))}
         </ProductList>
 
+        <ReactJson
+          theme='monokai'
+          enableClipboard={false}
+          displayObjectSize={false}
+          displayDataTypes={false}
+          style={{ fontSize: '1.4rem', gridArea: 'json', overflow: 'auto' }}
+          name={false}
+          src={appData}
+        />
+
         <ContentFooter>
           <AddProduct
             onClick={() => {
@@ -248,76 +273,6 @@ export default function App() {
           </AddProduct>
         </ContentFooter>
       </Content>
-
-      {/* <Content>
-        {categoryIds.map(categoryId => {
-          const { name: categoryName, brandIds } = categories[categoryId]
-
-          return (
-            <div key={categoryId}>
-              <h1 onClick={() => dispatch(removeCategory(categoryId))}>{categoryName}</h1>
-
-              <button
-                type='button'
-                style={{ background: 'lightgray' }}
-                onClick={() => {
-                  const newBrandName = prompt('Input brand name')
-                  if (!newBrandName) return
-                  dispatch(addBrand({ categoryId, brandName: newBrandName }))
-                }}
-              >
-                Add brand
-              </button>
-
-              {brandIds.map(brandId => {
-                const { name: brandName, productIds } = brands[brandId]
-
-                return (
-                  <div key={brandId}>
-                    <h3 onClick={() => dispatch(removeBrand(brandId))}>{brandName}</h3>
-
-                    <button
-                      type='button'
-                      style={{ background: 'orangered', color: 'white' }}
-                      onClick={() => {
-                        const newProductName = prompt('Input product name')
-                        if (!newProductName) return
-                        dispatch(addProduct({ brandId, productName: newProductName }))
-                      }}
-                    >
-                      Add product
-                    </button>
-
-                    {productIds.map(productId => {
-                      const { name: productName } = products[productId]
-
-                      return (
-                        <h5 key={productId} onClick={() => dispatch(removeProduct(productId))}>
-                          {productName}
-                        </h5>
-                      )
-                    })}
-                  </div>
-                )
-              })}
-            </div>
-          )
-        })}
-
-        <div style={{ marginTop: '4rem' }} />
-
-        <button
-          type='button'
-          style={{ background: 'lightgreen' }}
-          onClick={() => {
-            const newCategoryName = prompt('Input category name')
-            if (!newCategoryName) return
-            dispatch(addCategory(newCategoryName))
-          }}
-        >
-          Add category
-        </button>
-      </Content> */}
     </AppWrapper>
   )
 }

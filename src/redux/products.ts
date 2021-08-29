@@ -194,6 +194,16 @@ export const appDataSlice = createSlice({
       state.categories[newCategoryId] = { name: categoryName, brandIds: [] }
     },
     removeCategory: (state, { payload: categoryId }: PayloadAction<string>) => {
+      // removing nested brands and products
+      state.categories[categoryId].brandIds.forEach(brandId => {
+        state.brands[brandId].productIds.forEach(productId => {
+          delete state.products[productId]
+        })
+
+        delete state.brands[brandId]
+      })
+
+      // removing category
       delete state.categories[categoryId]
     },
     addBrand: (
@@ -205,12 +215,17 @@ export const appDataSlice = createSlice({
       state.brands[newBrandId] = { name: brandName, productIds: [], categoryId }
     },
     removeBrand: (state, { payload: brandId }: PayloadAction<string>) => {
-      const { categoryId } = state.brands[brandId]
+      const { categoryId, productIds } = state.brands[brandId]
       delete state.brands[brandId]
 
       const { brandIds } = state.categories[categoryId]
-      const index = brandIds.findIndex(id => id === brandId)
-      brandIds.splice(index, 1)
+      const brandIndex = brandIds.findIndex(id => id === brandId)
+      brandIds.splice(brandIndex, 1)
+
+      // removing nested products
+      productIds.forEach(productId => {
+        delete state.products[productId]
+      })
     },
     addProduct: (
       state,
