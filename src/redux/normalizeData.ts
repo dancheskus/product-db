@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid'
+
 import { INewBrand, INewCategory, INewProduct, IResponseData } from './types'
 
 export default (data: IResponseData) => {
@@ -5,14 +7,19 @@ export default (data: IResponseData) => {
   const newBrands: INewBrand = {}
   const newProducts: INewProduct = {}
 
-  data.categories.forEach(({ id: categoryId, name, brands }) => {
+  data.categories.forEach(({ id: originalCategoryId, name, brands }) => {
+    const categoryId = uuidv4()
     newCategories[categoryId] = {
+      originalCategoryId,
       name,
-      brandIds: brands.map(({ id: brandId, name, products }) => {
+      brandIds: brands.map(({ id: originalBrandId, name, products }) => {
+        const brandId = uuidv4()
         newBrands[brandId] = {
+          originalBrandId,
           name,
-          productIds: products.map(({ id: productId, name }) => {
-            newProducts[productId] = { name, brandId }
+          productIds: products.map(({ id: originalProductId, name }) => {
+            const productId = uuidv4()
+            newProducts[productId] = { originalProductId, name, brandId }
 
             return productId
           }),

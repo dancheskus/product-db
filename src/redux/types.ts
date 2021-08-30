@@ -1,9 +1,9 @@
 interface IProduct {
-  id: string
+  id: number
   name: string
 }
 interface IBrand {
-  id: string
+  id: number
   name: string
   products: IProduct[]
 }
@@ -19,12 +19,14 @@ export interface IResponseData {
 
 export interface INewCategory {
   [key: string]: {
+    originalCategoryId?: string
     name: string
     brandIds: string[]
   }
 }
 export interface INewBrand {
   [key: string]: {
+    originalBrandId?: number
     name: string
     productIds: string[]
     categoryId: string
@@ -32,6 +34,7 @@ export interface INewBrand {
 }
 export interface INewProduct {
   [key: string]: {
+    originalProductId?: number
     name: string
     brandId: string
   }
